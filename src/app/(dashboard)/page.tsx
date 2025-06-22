@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { useState, useEffect } from "react"
@@ -49,7 +50,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export default function Dashboard() {
+export function DashboardPage() {
   const [costData, setCostData] = useState<any[]>([])
 
   useEffect(() => {
