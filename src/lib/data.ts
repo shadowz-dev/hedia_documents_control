@@ -78,14 +78,5 @@ export const teamMembers = [
     { id: 'user4', name: 'Olivia Chen', email: 'olivia.c@hrdocs.com', role: 'Staff' },
 ];
 
-export const costData = [
-    { month: 'Jan', total: Math.floor(Math.random() * 5000) + 1000 },
-    { month: 'Feb', total: Math.floor(Math.random() * 5000) + 1000 },
-    { month: 'Mar', total: Math.floor(Math.random() * 5000) + 1000 },
-    { month: 'Apr', total: Math.floor(Math.random() * 5000) + 1000 },
-    { month: 'May', total: Math.floor(Math.random() * 5000) + 1000 },
-    { month: 'Jun', total: Math.floor(Math.random() * 5000) + 1000 },
-]
-
 export const recentActivity = documents.slice(0, 3);
 export const expiringSoon = documents.filter(d => d.status === 'Expiring Soon');

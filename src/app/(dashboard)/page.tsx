@@ -1,5 +1,6 @@
 "use client"
 
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import {
   Activity,
@@ -38,10 +39,24 @@ import {
   YAxis,
   Tooltip,
 } from "recharts"
-import { costData, expiringSoon, recentActivity } from "@/lib/data"
+import { expiringSoon, recentActivity } from "@/lib/data"
 import { ChartTooltipContent } from "@/components/ui/chart"
 
 export default function Dashboard() {
+  const [costData, setCostData] = useState<any[]>([])
+
+  useEffect(() => {
+    const generatedCostData = [
+      { month: 'Jan', total: Math.floor(Math.random() * 5000) + 1000 },
+      { month: 'Feb', total: Math.floor(Math.random() * 5000) + 1000 },
+      { month: 'Mar', total: Math.floor(Math.random() * 5000) + 1000 },
+      { month: 'Apr', total: Math.floor(Math.random() * 5000) + 1000 },
+      { month: 'May', total: Math.floor(Math.random() * 5000) + 1000 },
+      { month: 'Jun', total: Math.floor(Math.random() * 5000) + 1000 },
+    ];
+    setCostData(generatedCostData);
+  }, []);
+
   return (
     <>
       <div className="flex items-center">
