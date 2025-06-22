@@ -1,4 +1,5 @@
 import { PlusCircle, File, ListFilter } from "lucide-react";
+import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -124,7 +125,7 @@ export default function DocumentsPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        {doc.expiryDate ? new Date(doc.expiryDate).toLocaleDateString() : 'N/A'}
+                        {doc.expiryDate ? format(new Date(doc.expiryDate), "PPP") : 'N/A'}
                       </TableCell>
                       <TableCell>
                         <Button variant="ghost" size="sm">View</Button>

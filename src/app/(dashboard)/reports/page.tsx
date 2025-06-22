@@ -1,4 +1,5 @@
 import { File } from "lucide-react"
+import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button"
 import {
@@ -85,8 +86,8 @@ export default function ReportsPage() {
                 <TableRow key={doc.id}>
                   <TableCell className="font-medium">{doc.name}</TableCell>
                   <TableCell>{doc.category}</TableCell>
-                  <TableCell>{new Date(doc.uploadDate).toLocaleDateString()}</TableCell>
-                  <TableCell>{doc.expiryDate ? new Date(doc.expiryDate).toLocaleDateString() : 'N/A'}</TableCell>
+                  <TableCell>{format(new Date(doc.uploadDate), "PPP")}</TableCell>
+                  <TableCell>{doc.expiryDate ? format(new Date(doc.expiryDate), "PPP") : 'N/A'}</TableCell>
                   <TableCell className="text-right">${doc.cost.toFixed(2)}</TableCell>
                 </TableRow>
               ))}

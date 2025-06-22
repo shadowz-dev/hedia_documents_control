@@ -9,6 +9,7 @@ import {
   CircleDollarSign,
   FileClock,
 } from "lucide-react"
+import { format } from "date-fns"
 import {
   Avatar,
   AvatarFallback,
@@ -176,7 +177,7 @@ export default function Dashboard() {
                   {doc.name}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Expires on {new Date(doc.expiryDate).toLocaleDateString()}
+                  Expires on {format(new Date(doc.expiryDate), "PPP")}
                 </p>
               </div>
               <div className="ml-auto font-medium">
