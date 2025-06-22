@@ -1,15 +1,4 @@
-
-'use client';
-
-import { AppLayout } from "@/components/app-layout";
-import { DashboardPage } from "./(dashboard)/page";
-
-export default function Home() {
-  // This page now directly renders the dashboard within the main layout
-  // to resolve a routing conflict and an infinite redirect loop.
-  return (
-    <AppLayout>
-      <DashboardPage />
-    </AppLayout>
-  );
-}
+// This file now re-exports the default from the actual dashboard page,
+// which is located inside the (dashboard) route group.
+// This resolves a route conflict where two pages were trying to serve the root URL ("/").
+export { default } from './(dashboard)/page';
