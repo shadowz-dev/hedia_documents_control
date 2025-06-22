@@ -118,7 +118,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
                 <Avatar>
-                  <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" alt="Admin User" />
+                  <AvatarImage src="https://placehold.co/40x40.png" alt="Admin User" data-ai-hint="person avatar" />
                   <AvatarFallback>AU</AvatarFallback>
                 </Avatar>
                 <span className="sr-only">Toggle user menu</span>

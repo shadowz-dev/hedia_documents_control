@@ -1,8 +1,8 @@
-import { FileText, Users, Calendar, Settings, BarChart, HardHat, Passport, BadgeCheck } from "lucide-react";
+import { Home, FolderKanban, Users, Calendar, Settings, BarChart, BadgeCheck } from "lucide-react";
 
 export const navLinks = [
-  { href: "/", label: "Dashboard", icon: FileText },
-  { href: "/documents", label: "Documents", icon: HardHat },
+  { href: "/", label: "Dashboard", icon: Home },
+  { href: "/documents", label: "Documents", icon: FolderKanban },
   { href: "/categories", label: "Categories", icon: BadgeCheck },
   { href: "/reports", label: "Reports", icon: BarChart },
   { href: "/calendar", label: "Calendar", icon: Calendar },
