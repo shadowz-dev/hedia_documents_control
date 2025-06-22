@@ -128,7 +128,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Link href="/dashboard/settings" className='flex items-center w-full'>
+                <Link href="/settings" className='flex items-center w-full'>
                   <Settings className="mr-2 h-4 w-4" />
                   Settings
                 </Link>

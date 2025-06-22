@@ -35,25 +35,44 @@ import {
 import {
   Bar,
   BarChart,
-  ResponsiveContainer,
   XAxis,
   YAxis,
   Tooltip,
 } from "recharts"
 import { expiringSoon, recentActivity } from "@/lib/data"
-import { ChartTooltipContent } from "@/components/ui/chart"
+import { ChartTooltipContent, ChartContainer, type ChartConfig } from "@/components/ui/chart"
+
+const chartConfig = {
+  total: {
+    label: "Total",
+    color: "hsl(var(--primary))",
+  },
+} satisfies ChartConfig
 
 export default function Dashboard() {
   const [costData, setCostData] = useState<any[]>([])
 
   useEffect(() => {
+    // Using a static seed for Math.random for consistent data generation
+    // This is a simplified approach. For true consistency, data should be fetched
+    // or defined statically.
+    const generateConsistentRandom = (seed: number) => {
+        let state = seed;
+        return () => {
+            state = (state * 9301 + 49297) % 233280;
+            return state / 233280;
+        };
+    };
+    
+    const random = generateConsistentRandom(1);
+
     const generatedCostData = [
-      { month: 'Jan', total: Math.floor(Math.random() * 5000) + 1000 },
-      { month: 'Feb', total: Math.floor(Math.random() * 5000) + 1000 },
-      { month: 'Mar', total: Math.floor(Math.random() * 5000) + 1000 },
-      { month: 'Apr', total: Math.floor(Math.random() * 5000) + 1000 },
-      { month: 'May', total: Math.floor(Math.random() * 5000) + 1000 },
-      { month: 'Jun', total: Math.floor(Math.random() * 5000) + 1000 },
+      { month: 'Jan', total: Math.floor(random() * 4000) + 1000 },
+      { month: 'Feb', total: Math.floor(random() * 4000) + 1000 },
+      { month: 'Mar', total: Math.floor(random() * 4000) + 1000 },
+      { month: 'Apr', total: Math.floor(random() * 4000) + 1000 },
+      { month: 'May', total: Math.floor(random() * 4000) + 1000 },
+      { month: 'Jun', total: Math.floor(random() * 4000) + 1000 },
     ];
     setCostData(generatedCostData);
   }, []);
@@ -126,7 +145,7 @@ export default function Dashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
+            <ChartContainer config={chartConfig} className="h-[300px] w-full">
               <BarChart data={costData}>
                 <XAxis
                   dataKey="month"
@@ -146,9 +165,9 @@ export default function Dashboard() {
                   cursor={{ fill: 'hsl(var(--muted))' }}
                   content={<ChartTooltipContent />}
                 />
-                <Bar dataKey="total" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="total" fill="var(--color-total)" radius={[4, 4, 0, 0]} />
               </BarChart>
-            </ResponsiveContainer>
+            </ChartContainer>
           </CardContent>
         </Card>
         <Card>
@@ -160,7 +179,7 @@ export default function Dashboard() {
               </CardDescription>
             </div>
             <Button asChild size="sm" className="ml-auto gap-1">
-              <Link href="/dashboard/documents">
+              <Link href="/documents">
                 View All
                 <ArrowUpRight className="h-4 w-4" />
               </Link>

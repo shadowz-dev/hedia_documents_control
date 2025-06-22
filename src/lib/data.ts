@@ -1,13 +1,13 @@
 import { FileText, Users, Calendar, Settings, BarChart, HardHat, Passport, BadgeCheck } from "lucide-react";
 
 export const navLinks = [
-  { href: "/dashboard", label: "Dashboard", icon: FileText },
-  { href: "/dashboard/documents", label: "Documents", icon: HardHat },
-  { href: "/dashboard/categories", label: "Categories", icon: BadgeCheck },
-  { href: "/dashboard/reports", label: "Reports", icon: BarChart },
-  { href: "/dashboard/calendar", label: "Calendar", icon: Calendar },
-  { href: "/dashboard/team", label: "Team", icon: Users },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings },
+  { href: "/", label: "Dashboard", icon: FileText },
+  { href: "/documents", label: "Documents", icon: HardHat },
+  { href: "/categories", label: "Categories", icon: BadgeCheck },
+  { href: "/reports", label: "Reports", icon: BarChart },
+  { href: "/calendar", label: "Calendar", icon: Calendar },
+  { href: "/team", label: "Team", icon: Users },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 export const documentCategories = [
