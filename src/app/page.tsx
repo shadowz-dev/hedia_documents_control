@@ -1,21 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { AppLayout } from "@/components/app-layout";
+import DashboardPage from "./(dashboard)/page";
 
 export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace('/dashboard');
-  }, [router]);
-
+  // This page now directly renders the dashboard within the main layout
+  // to resolve a routing conflict and an infinite redirect loop.
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-background">
-      <div className="flex flex-col items-center gap-4">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-        <p className="text-muted-foreground">Redirecting to your dashboard...</p>
-      </div>
-    </div>
+    <AppLayout>
+      <DashboardPage />
+    </AppLayout>
   );
 }
