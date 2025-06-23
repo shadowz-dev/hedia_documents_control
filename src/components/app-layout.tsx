@@ -23,7 +23,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from '@/components/ui/button';
-import { Bell, Home, Menu, Search, Settings } from 'lucide-react';
+import { Bell, Menu, Search, Settings } from 'lucide-react';
 import { navLinks } from '@/lib/data';
 import { Logo } from '@/components/logo';
 import { cn } from '@/lib/utils';
@@ -38,7 +38,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Logo />
-              <span className="">HR Docs Keeper</span>
+              <span className="">Metco Marine Services</span>
             </Link>
           </div>
           <div className="flex-1">
@@ -80,7 +80,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   className="flex items-center gap-2 text-lg font-semibold mb-4"
                 >
                   <Logo />
-                  <span className="sr-only">HR Docs Keeper</span>
+                  <span className="sr-only">Metco Marine Services</span>
                 </Link>
                 {navLinks.map((link) => (
                   <Link
@@ -118,7 +118,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
                 <Avatar>
-                  <AvatarImage src="https://placehold.co/40x40.png" alt="Admin User" data-ai-hint="person avatar" />
+                  <AvatarImage src="https://placehold.co/40x40.png" alt="Admin User" data-ai-hint="captain avatar" />
                   <AvatarFallback>AU</AvatarFallback>
                 </Avatar>
                 <span className="sr-only">Toggle user menu</span>

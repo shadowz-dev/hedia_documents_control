@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
 
 export const metadata: Metadata = {
-  title: 'HR Docs Keeper',
-  description: 'A comprehensive HR Document Management System',
+  title: 'Metco Marine Services',
+  description: 'A comprehensive Document Management System',
 };
 
 export default function RootLayout({
