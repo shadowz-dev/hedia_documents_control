@@ -21,6 +21,7 @@ export const documentCategories = [
 export type Document = {
     id: string;
     name: string;
+    entityName: string;
     category: string;
     uploadDate: string;
     expiryDate: string | null;
@@ -33,7 +34,8 @@ export type Document = {
 export const documents: Document[] = [
     {
         id: 'doc1',
-        name: 'John Doe - Forklift License',
+        name: 'Forklift License',
+        entityName: 'John Doe',
         category: 'Licenses',
         uploadDate: '2023-05-15',
         expiryDate: '2024-08-20',
@@ -44,7 +46,8 @@ export const documents: Document[] = [
     },
     {
         id: 'doc2',
-        name: 'Jane Smith - Passport',
+        name: 'Passport',
+        entityName: 'Jane Smith',
         category: 'Passports',
         uploadDate: '2022-01-20',
         expiryDate: '2027-01-19',
@@ -55,7 +58,8 @@ export const documents: Document[] = [
     },
     {
         id: 'doc3',
-        name: 'Peter Jones - First Aid Certificate',
+        name: 'First Aid Certificate',
+        entityName: 'John Doe',
         category: 'Certificates',
         uploadDate: '2023-10-01',
         expiryDate: '2024-07-01',
@@ -66,7 +70,8 @@ export const documents: Document[] = [
     },
     {
         id: 'doc4',
-        name: 'Emily White - Employment Contract',
+        name: 'Employment Contract',
+        entityName: 'Metco Marine',
         category: 'Contracts',
         uploadDate: '2021-06-01',
         expiryDate: null,
@@ -77,7 +82,8 @@ export const documents: Document[] = [
     },
     {
         id: 'doc5',
-        name: 'Michael Brown - Work Visa',
+        name: 'Work Visa',
+        entityName: 'Michael Brown',
         category: 'Visas',
         uploadDate: '2023-09-01',
         expiryDate: '2025-09-01',
@@ -85,8 +91,26 @@ export const documents: Document[] = [
         cost: 500,
         version: 1,
         fileUrl: 'https://placehold.co/800x1100.png'
+    },
+    {
+        id: 'doc6',
+        name: 'Seaman Book',
+        entityName: 'Jane Smith',
+        category: 'Licenses',
+        uploadDate: '2024-01-10',
+        expiryDate: '2029-01-09',
+        status: 'Active',
+        cost: 200,
+        version: 1,
+        fileUrl: 'https://placehold.co/800x1100.png'
     }
 ];
+
+const entityNames = [...new Set(documents.map(doc => doc.entityName))];
+export const documentEntities = entityNames.map((name, index) => ({
+    id: `ent${index + 1}`,
+    name,
+}));
 
 export const teamMembers = [
     { id: 'user1', name: 'Admin User', email: 'admin@hrdocs.com', role: 'Admin' },

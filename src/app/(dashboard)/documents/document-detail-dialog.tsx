@@ -35,7 +35,7 @@ export function DocumentDetailDialog({
         <DialogHeader>
           <DialogTitle>{document.name}</DialogTitle>
           <DialogDescription>
-            Details for document ID: {document.id}
+            Details for document of {document.entityName}.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -57,6 +57,10 @@ export function DocumentDetailDialog({
             </Link>
           </div>
           <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Entity/Employee:</span>
+              <span className="font-medium">{document.entityName}</span>
+            </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Category:</span>
               <span className="font-medium">{document.category}</span>
