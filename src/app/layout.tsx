@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ['latin'], variable: '--font-body' });
 
 export const metadata: Metadata = {
-  title: 'Metco Marine Services',
+  title: 'Hedia Documents Manager',
   description: 'A comprehensive Document Management System',
 };
 

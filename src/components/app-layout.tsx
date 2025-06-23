@@ -38,7 +38,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
             <Link href="/" className="flex items-center gap-2 font-semibold">
               <Logo />
-              <span className="">Metco Marine Services</span>
+              <span className="">Hedia Documents Manager</span>
             </Link>
           </div>
           <div className="flex-1">
@@ -80,7 +80,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                   className="flex items-center gap-2 text-lg font-semibold mb-4"
                 >
                   <Logo />
-                  <span className="sr-only">Metco Marine Services</span>
+                  <span className="sr-only">Hedia Documents Manager</span>
                 </Link>
                 {navLinks.map((link) => (
                   <Link
