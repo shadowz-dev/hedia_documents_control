@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -40,6 +41,8 @@ import { documentCategories } from "@/lib/data";
 const formSchema = z.object({
   file: z.instanceof(File).refine(file => file, { message: "File is required." }),
   documentName: z.string().min(1, { message: "Document name is required." }),
+  companyName: z.string().min(1, { message: "Company name is required." }),
+  personName: z.string().min(1, { message: "Person name is required." }),
   category: z.string().min(1, { message: "Please select a category." }),
   tags: z.string().optional(),
   expiryDate: z.date().optional(),
@@ -67,6 +70,8 @@ export function DocumentUploadDialog() {
     defaultValues: {
         file: undefined,
         documentName: "",
+        companyName: "",
+        personName: "",
         category: "",
         tags: "",
         expiryDate: undefined,
@@ -154,6 +159,34 @@ export function DocumentUploadDialog() {
                       <FormLabel>Document Name</FormLabel>
                       <FormControl>
                         <Input placeholder="e.g., John Doe - Passport" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="companyName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Company Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter company name or 'N/A'" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                 <FormField
+                  control={form.control}
+                  name="personName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Person Name</FormLabel>
+                       <FormControl>
+                        <Input placeholder="Enter person name or 'N/A'" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -1,4 +1,5 @@
-import { LayoutDashboard, FolderKanban, Users, Calendar, Settings, BarChart, BadgeCheck, Anchor } from "lucide-react";
+
+import { LayoutDashboard, FolderKanban, Users, Calendar, Settings, BarChart, BadgeCheck, Archive } from "lucide-react";
 
 export const navLinks = [
   { href: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -7,6 +8,7 @@ export const navLinks = [
   { href: "/reports", label: "Reports", icon: BarChart },
   { href: "/calendar", label: "Calendar", icon: Calendar },
   { href: "/team", label: "Team", icon: Users },
+  { href: "/archive", label: "Archive", icon: Archive },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
@@ -111,6 +113,35 @@ export const documents: Document[] = [
         version: 1,
         fileUrl: 'https://placehold.co/800x1100.png'
     }
+];
+
+export const archivedDocuments: Document[] = [
+    {
+        id: 'doc1-archived',
+        name: 'Forklift License',
+        companyName: 'N/A',
+        personName: 'John Doe',
+        category: 'Licenses',
+        uploadDate: '2022-05-15',
+        expiryDate: '2023-08-20',
+        status: 'Expired',
+        cost: 120,
+        version: 1,
+        fileUrl: 'https://placehold.co/800x1100.png'
+    },
+     {
+        id: 'doc4-archived',
+        name: 'Employment Contract',
+        companyName: 'Metco Marine',
+        personName: 'N/A',
+        category: 'Contracts',
+        uploadDate: '2020-06-01',
+        expiryDate: null,
+        status: 'Active',
+        cost: 0,
+        version: 2,
+        fileUrl: 'https://placehold.co/800x1100.png'
+    },
 ];
 
 const companyNames = [...new Set(documents.map(doc => doc.companyName).filter(name => name !== 'N/A'))];
