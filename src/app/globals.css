@@ -72,26 +72,72 @@ body {
   }
 }
 
-.rdp-day_has_event {
+.rdp-day_has_appointment,
+.rdp-day_has_expiry,
+.rdp-day_has_both {
   position: relative;
 }
-.rdp-day_has_event:not([aria-selected]):not(.rdp-day_today) > .rdp-button:hover {
-    background-color: hsl(var(--accent));
+
+.rdp-day_has_appointment:not([aria-selected]):not(.rdp-day_today) > .rdp-button:hover,
+.rdp-day_has_expiry:not([aria-selected]):not(.rdp-day_today) > .rdp-button:hover,
+.rdp-day_has_both:not([aria-selected]):not(.rdp-day_today) > .rdp-button:hover {
+    background-color: hsl(var(--muted));
 }
-.rdp-day_has_event::after {
+
+.rdp-day_has_appointment::after,
+.rdp-day_has_expiry::after,
+.rdp-day_has_both::before,
+.rdp-day_has_both::after {
   content: '';
   position: absolute;
   bottom: 6px;
-  left: 50%;
-  transform: translateX(-50%);
   width: 5px;
   height: 5px;
   border-radius: 50%;
+}
+
+/* Single dot for appointment */
+.rdp-day_has_appointment::after {
+  left: 50%;
+  transform: translateX(-50%);
   background-color: hsl(var(--primary));
 }
-.rdp-day_today.rdp-day_has_event::after {
+.rdp-day_today.rdp-day_has_appointment::after {
   background-color: hsl(var(--accent-foreground));
 }
-[aria-selected="true"].rdp-day_has_event::after {
+[aria-selected="true"].rdp-day_has_appointment::after {
+  background-color: hsl(var(--primary-foreground));
+}
+
+/* Single dot for expiry */
+.rdp-day_has_expiry::after {
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: hsl(var(--accent));
+}
+.rdp-day_today.rdp-day_has_expiry::after {
+  background-color: hsl(var(--accent-foreground));
+}
+[aria-selected="true"].rdp-day_has_expiry::after {
+  background-color: hsl(var(--primary-foreground));
+}
+
+/* Two dots for both */
+.rdp-day_has_both::before {
+  left: calc(50% - 4px);
+  transform: translateX(-50%);
+  background-color: hsl(var(--primary));
+}
+.rdp-day_has_both::after {
+  left: calc(50% + 4px);
+  transform: translateX(-50%);
+  background-color: hsl(var(--accent));
+}
+.rdp-day_today.rdp-day_has_both::before,
+.rdp-day_today.rdp-day_has_both::after {
+  background-color: hsl(var(--accent-foreground));
+}
+[aria-selected="true"].rdp-day_has_both::before,
+[aria-selected="true"].rdp-day_has_both::after {
   background-color: hsl(var(--primary-foreground));
 }

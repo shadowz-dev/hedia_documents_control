@@ -23,15 +23,31 @@ export default function CalendarPage() {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(new Date())
   const [isAddDialogOpen, setAddDialogOpen] = React.useState(false)
 
-  const eventDates = React.useMemo(() => {
-    const docExpiryDates = documents
-      .filter(doc => doc.expiryDate)
-      .map(doc => parseISO(doc.expiryDate!))
+  const { appointmentDates, expiryDates, bothDates } = React.useMemo(() => {
+    const docExpiryDatesRaw = documents
+        .filter(doc => doc.expiryDate)
+        .map(doc => parseISO(doc.expiryDate!).toDateString());
 
-    const appointmentDates = appointments.map(appt => parseISO(appt.date))
+    const appointmentDatesRaw = appointments.map(appt =>
+        parseISO(appt.date).toDateString()
+    );
 
-    return [...docExpiryDates, ...appointmentDates]
-  }, [])
+    const docExpirySet = new Set(docExpiryDatesRaw);
+    const appointmentSet = new Set(appointmentDatesRaw);
+
+    const allDocDates = [...docExpirySet].map(d => new Date(d));
+    const allAppointmentDates = [...appointmentSet].map(d => new Date(d));
+
+    const both = allDocDates.filter(d => appointmentSet.has(d.toDateString()));
+    const appointmentOnly = allAppointmentDates.filter(d => !docExpirySet.has(d.toDateString()));
+    const expiryOnly = allDocDates.filter(d => !appointmentSet.has(d.toDateString()));
+
+    return {
+        appointmentDates: appointmentOnly,
+        expiryDates: expiryOnly,
+        bothDates: both,
+    };
+  }, []);
 
   const selectedDayEvents = React.useMemo(() => {
     if (!selectedDate) {
@@ -68,17 +84,34 @@ export default function CalendarPage() {
               selected={selectedDate}
               onSelect={setSelectedDate}
               className="rounded-md border"
-              modifiers={{ hasEvent: eventDates }}
+              modifiers={{ 
+                appointment: appointmentDates, 
+                expiry: expiryDates,
+                both: bothDates,
+              }}
               modifiersClassNames={{
-                hasEvent: "rdp-day_has_event",
+                appointment: "rdp-day_has_appointment",
+                expiry: "rdp-day_has_expiry",
+                both: "rdp-day_has_both",
               }}
             />
           </CardContent>
-          <CardFooter className="text-sm text-muted-foreground">
+          <CardFooter className="flex flex-col items-start gap-2 text-sm text-muted-foreground">
              <div className="flex items-center gap-2">
-                <span className="flex h-2 w-2 translate-y-px shrink-0 rounded-full bg-primary" />
-                <span>Indicates a document expiry or an appointment.</span>
+                <span className="flex h-2 w-2 shrink-0 rounded-full bg-primary" />
+                <span>Appointment</span>
              </div>
+             <div className="flex items-center gap-2">
+                <span className="flex h-2 w-2 shrink-0 rounded-full bg-accent" />
+                <span>Document Expiry</span>
+             </div>
+              <div className="flex items-center gap-2">
+                <div className="relative flex h-2 w-5 shrink-0 items-center">
+                    <span className="absolute left-0 h-2 w-2 rounded-full bg-primary" />
+                    <span className="absolute right-0 h-2 w-2 rounded-full bg-accent" />
+                </div>
+                <span>Both Appointment & Expiry</span>
+            </div>
           </CardFooter>
         </Card>
 
