@@ -21,7 +21,8 @@ export const documentCategories = [
 export type Document = {
     id: string;
     name: string;
-    entityName: string;
+    companyName: string;
+    personName: string;
     category: string;
     uploadDate: string;
     expiryDate: string | null;
@@ -35,7 +36,8 @@ export const documents: Document[] = [
     {
         id: 'doc1',
         name: 'Forklift License',
-        entityName: 'John Doe',
+        companyName: 'N/A',
+        personName: 'John Doe',
         category: 'Licenses',
         uploadDate: '2023-05-15',
         expiryDate: '2024-08-20',
@@ -47,7 +49,8 @@ export const documents: Document[] = [
     {
         id: 'doc2',
         name: 'Passport',
-        entityName: 'Jane Smith',
+        companyName: 'N/A',
+        personName: 'Jane Smith',
         category: 'Passports',
         uploadDate: '2022-01-20',
         expiryDate: '2027-01-19',
@@ -59,7 +62,8 @@ export const documents: Document[] = [
     {
         id: 'doc3',
         name: 'First Aid Certificate',
-        entityName: 'John Doe',
+        companyName: 'N/A',
+        personName: 'John Doe',
         category: 'Certificates',
         uploadDate: '2023-10-01',
         expiryDate: '2024-07-01',
@@ -71,7 +75,8 @@ export const documents: Document[] = [
     {
         id: 'doc4',
         name: 'Employment Contract',
-        entityName: 'Metco Marine',
+        companyName: 'Metco Marine',
+        personName: 'N/A',
         category: 'Contracts',
         uploadDate: '2021-06-01',
         expiryDate: null,
@@ -83,7 +88,8 @@ export const documents: Document[] = [
     {
         id: 'doc5',
         name: 'Work Visa',
-        entityName: 'Michael Brown',
+        companyName: 'N/A',
+        personName: 'Michael Brown',
         category: 'Visas',
         uploadDate: '2023-09-01',
         expiryDate: '2025-09-01',
@@ -95,7 +101,8 @@ export const documents: Document[] = [
     {
         id: 'doc6',
         name: 'Seaman Book',
-        entityName: 'Jane Smith',
+        companyName: 'N/A',
+        personName: 'Jane Smith',
         category: 'Licenses',
         uploadDate: '2024-01-10',
         expiryDate: '2029-01-09',
@@ -106,11 +113,18 @@ export const documents: Document[] = [
     }
 ];
 
-const entityNames = [...new Set(documents.map(doc => doc.entityName))];
-export const documentEntities = entityNames.map((name, index) => ({
-    id: `ent${index + 1}`,
+const companyNames = [...new Set(documents.map(doc => doc.companyName).filter(name => name !== 'N/A'))];
+export const documentCompanies = companyNames.map((name, index) => ({
+    id: `comp${index + 1}`,
     name,
 }));
+
+const personNames = [...new Set(documents.map(doc => doc.personName).filter(name => name !== 'N/A'))];
+export const documentPersons = personNames.map((name, index) => ({
+    id: `pers${index + 1}`,
+    name,
+}));
+
 
 export const teamMembers = [
     { id: 'user1', name: 'Admin User', email: 'admin@hrdocs.com', role: 'Admin' },

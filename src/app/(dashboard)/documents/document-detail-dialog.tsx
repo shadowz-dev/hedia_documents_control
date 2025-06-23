@@ -35,7 +35,7 @@ export function DocumentDetailDialog({
         <DialogHeader>
           <DialogTitle>{document.name}</DialogTitle>
           <DialogDescription>
-            Details for document of {document.entityName}.
+            Details for document of {document.personName !== 'N/A' ? document.personName : document.companyName}.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -58,8 +58,12 @@ export function DocumentDetailDialog({
           </div>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-muted-foreground">Entity/Employee:</span>
-              <span className="font-medium">{document.entityName}</span>
+              <span className="text-muted-foreground">Company:</span>
+              <span className="font-medium">{document.companyName}</span>
+            </div>
+             <div className="flex justify-between">
+              <span className="text-muted-foreground">Person:</span>
+              <span className="font-medium">{document.personName}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Category:</span>

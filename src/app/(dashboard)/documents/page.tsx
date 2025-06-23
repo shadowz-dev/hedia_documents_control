@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { File, ListFilter, UserSearch } from "lucide-react"
+import { File, ListFilter, Building2, User } from "lucide-react"
 import { format } from "date-fns"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -35,7 +35,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import { documents, documentCategories, documentEntities, type Document } from "@/lib/data"
+import { documents, documentCategories, documentCompanies, documentPersons, type Document } from "@/lib/data"
 import { DocumentUploadDialog } from "./document-upload-dialog"
 import { DocumentDetailDialog } from "./document-detail-dialog"
 import { DocumentRenewalDialog } from "./document-renewal-dialog"
@@ -48,7 +48,8 @@ export default function DocumentsPage() {
 
   const [activeTab, setActiveTab] = React.useState<Status>("all");
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);
-  const [selectedEntities, setSelectedEntities] = React.useState<string[]>([]);
+  const [selectedCompanies, setSelectedCompanies] = React.useState<string[]>([]);
+  const [selectedPersons, setSelectedPersons] = React.useState<string[]>([]);
 
   const filteredDocuments = React.useMemo(() => {
     return documents.filter(doc => {
@@ -63,13 +64,17 @@ export default function DocumentsPage() {
         return false;
       }
       
-      if (selectedEntities.length > 0 && !selectedEntities.includes(doc.entityName)) {
+      if (selectedCompanies.length > 0 && !selectedCompanies.includes(doc.companyName)) {
+        return false;
+      }
+
+      if (selectedPersons.length > 0 && !selectedPersons.includes(doc.personName)) {
         return false;
       }
 
       return true;
     });
-  }, [activeTab, selectedCategories, selectedEntities]);
+  }, [activeTab, selectedCategories, selectedCompanies, selectedPersons]);
 
   const handleCategoryFilterChange = (category: string, checked: boolean) => {
     setSelectedCategories(prev => 
@@ -77,9 +82,15 @@ export default function DocumentsPage() {
     );
   };
   
-  const handleEntityFilterChange = (entity: string, checked: boolean) => {
-    setSelectedEntities(prev => 
-      checked ? [...prev, entity] : prev.filter(e => e !== entity)
+ const handleCompanyFilterChange = (company: string, checked: boolean) => {
+    setSelectedCompanies(prev => 
+      checked ? [...prev, company] : prev.filter(c => c !== company)
+    );
+  };
+
+  const handlePersonFilterChange = (person: string, checked: boolean) => {
+    setSelectedPersons(prev => 
+      checked ? [...prev, person] : prev.filter(p => p !== person)
     );
   };
 
@@ -95,11 +106,12 @@ export default function DocumentsPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead className="hidden sm:table-cell">Entity</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead className="hidden md:table-cell">Status</TableHead>
-              <TableHead className="hidden md:table-cell">
+              <TableHead className="hidden sm:table-cell">Company</TableHead>
+              <TableHead className="hidden md:table-cell">Person</TableHead>
+              <TableHead>Document Name</TableHead>
+              <TableHead className="hidden lg:table-cell">Category</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="hidden lg:table-cell">
                 Expiry Date
               </TableHead>
               <TableHead>
@@ -110,12 +122,13 @@ export default function DocumentsPage() {
           <TableBody>
             {docs.length > 0 ? docs.map((doc) => (
               <TableRow key={doc.id}>
+                <TableCell className="hidden sm:table-cell font-medium">{doc.companyName}</TableCell>
+                <TableCell className="hidden md:table-cell font-medium">{doc.personName}</TableCell>
                 <TableCell className="font-medium">{doc.name}</TableCell>
-                <TableCell className="hidden sm:table-cell">{doc.entityName}</TableCell>
-                <TableCell>
+                <TableCell className="hidden lg:table-cell">
                   <Badge variant="outline">{doc.category}</Badge>
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
+                <TableCell>
                   <Badge
                     variant={
                       doc.status === "Active"
@@ -133,33 +146,34 @@ export default function DocumentsPage() {
                     {doc.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
+                <TableCell className="hidden lg:table-cell">
                   {doc.expiryDate
                     ? format(new Date(doc.expiryDate), "PPP")
                     : "N/A"}
                 </TableCell>
                 <TableCell className="text-right">
-                   <Button
-                    variant="outline"
-                    size="sm"
-                    className="mr-2"
-                    disabled={doc.status === "Active"}
-                    onClick={() => setRenewalDocument(doc)}
-                  >
-                    Renew
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setSelectedDocument(doc)}
-                  >
-                    View
-                  </Button>
+                   <div className="flex items-center justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={doc.status === "Active"}
+                      onClick={() => setRenewalDocument(doc)}
+                    >
+                      Renew
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectedDocument(doc)}
+                    >
+                      View
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             )) : (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
+                <TableCell colSpan={7} className="h-24 text-center">
                   No documents found.
                 </TableCell>
               </TableRow>
@@ -194,22 +208,46 @@ export default function DocumentsPage() {
              <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="h-8 gap-1">
-                  <UserSearch className="h-3.5 w-3.5" />
+                  <Building2 className="h-3.5 w-3.5" />
                   <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Filter by Entity
+                    Filter by Company
                   </span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Filter by Entity/Employee</DropdownMenuLabel>
+                <DropdownMenuLabel>Filter by Company</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {documentEntities.map((entity) => (
+                {documentCompanies.map((company) => (
                   <DropdownMenuCheckboxItem 
-                    key={entity.id}
-                    checked={selectedEntities.includes(entity.name)}
-                    onCheckedChange={(checked) => handleEntityFilterChange(entity.name, !!checked)}
+                    key={company.id}
+                    checked={selectedCompanies.includes(company.name)}
+                    onCheckedChange={(checked) => handleCompanyFilterChange(company.name, !!checked)}
                   >
-                    {entity.name}
+                    {company.name}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+             <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="h-8 gap-1">
+                  <User className="h-3.5 w-3.5" />
+                  <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
+                    Filter by Person
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Filter by Person</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {documentPersons.map((person) => (
+                  <DropdownMenuCheckboxItem 
+                    key={person.id}
+                    checked={selectedPersons.includes(person.name)}
+                    onCheckedChange={(checked) => handlePersonFilterChange(person.name, !!checked)}
+                  >
+                    {person.name}
                   </DropdownMenuCheckboxItem>
                 ))}
               </DropdownMenuContent>
