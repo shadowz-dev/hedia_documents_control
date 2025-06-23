@@ -1,19 +1,18 @@
+
 "use client"
 
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import {
-  Activity,
   ArrowUpRight,
   BadgeCheck,
   CircleDollarSign,
   FileClock,
 } from "lucide-react"
-import { format } from "date-fns"
+import { format, addMonths, getMonth, getYear } from "date-fns"
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
 } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -39,8 +38,8 @@ import {
   YAxis,
   Tooltip,
 } from "recharts"
-import { expiringSoon, recentActivity } from "@/lib/data"
-import { ChartTooltipContent, ChartContainer, type ChartConfig } from "@/components/ui/chart"
+import { documents } from "@/lib/data"
+import { ChartContainer, type ChartConfig } from "@/components/ui/chart"
 
 const chartConfig = {
   total: {
@@ -50,32 +49,53 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function DashboardPage() {
-  const [costData, setCostData] = useState<any[]>([])
+  const [renewalData, setRenewalData] = useState<any[]>([])
+  const [annualCost, setAnnualCost] = useState(0);
+  const [expiringNextMonth, setExpiringNextMonth] = useState<any[]>([]);
 
   useEffect(() => {
-    // Using a static seed for Math.random for consistent data generation
-    // This is a simplified approach. For true consistency, data should be fetched
-    // or defined statically.
-    const generateConsistentRandom = (seed: number) => {
-        let state = seed;
-        return () => {
-            state = (state * 9301 + 49297) % 233280;
-            return state / 233280;
-        };
-    };
-    
-    const random = generateConsistentRandom(1);
+    const now = new Date();
 
-    const generatedCostData = [
-      { month: 'Jan', total: Math.floor(random() * 4000) + 1000 },
-      { month: 'Feb', total: Math.floor(random() * 4000) + 1000 },
-      { month: 'Mar', total: Math.floor(random() * 4000) + 1000 },
-      { month: 'Apr', total: Math.floor(random() * 4000) + 1000 },
-      { month: 'May', total: Math.floor(random() * 4000) + 1000 },
-      { month: 'Jun', total: Math.floor(random() * 4000) + 1000 },
-    ];
-    setCostData(generatedCostData);
+    // Calculate renewal costs for the next 6 months
+    const renewalCosts = [];
+    for (let i = 0; i < 6; i++) {
+      const targetMonthDate = addMonths(now, i);
+      const targetMonth = getMonth(targetMonthDate);
+      const targetYear = getYear(targetMonthDate);
+      
+      const monthlyTotal = documents
+        .filter(doc => {
+          if (!doc.expiryDate) return false;
+          const expiryDate = new Date(doc.expiryDate);
+          return getMonth(expiryDate) === targetMonth && getYear(expiryDate) === targetYear;
+        })
+        .reduce((sum, doc) => sum + doc.cost, 0);
+
+      renewalCosts.push({
+        month: format(targetMonthDate, 'MMM'),
+        total: monthlyTotal,
+      });
+    }
+    setRenewalData(renewalCosts);
+
+    // Calculate total annual cost
+    const totalAnnualCost = documents.reduce((sum, doc) => sum + doc.cost, 0);
+    setAnnualCost(totalAnnualCost);
+
+    // Get documents expiring next month
+    const upcomingMonth = addMonths(now, 1);
+    const startOfUpcomingMonth = new Date(getYear(upcomingMonth), getMonth(upcomingMonth), 1);
+    const endOfUpcomingMonth = new Date(getYear(upcomingMonth), getMonth(upcomingMonth) + 1, 0);
+    
+    const expiringDocs = documents.filter(doc => {
+      if (!doc.expiryDate) return false;
+      const expiryDate = new Date(doc.expiryDate);
+      return expiryDate >= startOfUpcomingMonth && expiryDate <= endOfUpcomingMonth;
+    });
+    setExpiringNextMonth(expiringDocs);
+
   }, []);
+
 
   return (
     <>
@@ -93,7 +113,7 @@ export default function DashboardPage() {
           <CardContent>
             <div className="text-2xl font-bold">1,257</div>
             <p className="text-xs text-muted-foreground">
-              +20.1% from last month
+              +10.5% from last year
             </p>
           </CardContent>
         </Card>
@@ -105,9 +125,9 @@ export default function DashboardPage() {
             <FileClock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+12</div>
+            <div className="text-2xl font-bold">+{expiringNextMonth.length}</div>
             <p className="text-xs text-muted-foreground">
-              in the next 30 days
+              in the next month
             </p>
           </CardContent>
         </Card>
@@ -117,7 +137,7 @@ export default function DashboardPage() {
             <CircleDollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$1,205.32</div>
+            <div className="text-2xl font-bold">AED 1,205.32</div>
             <p className="text-xs text-muted-foreground">
               -5.2% from last month
             </p>
@@ -125,13 +145,13 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Users</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Annual Cost</CardTitle>
+            <CircleDollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+57</div>
+            <div className="text-2xl font-bold">AED {annualCost.toFixed(2)}</div>
             <p className="text-xs text-muted-foreground">
-              +1 since last hour
+              Total estimated annual cost
             </p>
           </CardContent>
         </Card>
@@ -139,14 +159,14 @@ export default function DashboardPage() {
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
         <Card className="xl:col-span-2">
           <CardHeader>
-            <CardTitle>Cost Analysis</CardTitle>
+            <CardTitle>Renewal Cost Forecast</CardTitle>
             <CardDescription>
-              Monthly costs for document renewals and fees.
+              Estimated renewal costs for the next 6 months.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer config={chartConfig} className="h-[300px] w-full">
-              <BarChart data={costData}>
+              <BarChart data={renewalData}>
                 <XAxis
                   dataKey="month"
                   stroke="#888888"
@@ -159,11 +179,38 @@ export default function DashboardPage() {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => `$${value}`}
+                  tickFormatter={(value) => `AED ${value}`}
                 />
                 <Tooltip
                   cursor={{ fill: 'hsl(var(--muted))' }}
-                  content={<ChartTooltipContent />}
+                  content={({ active, payload, label }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div className="grid min-w-[8rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl">
+                          <div className="font-medium">{label}</div>
+                          <div className="grid gap-1.5">
+                            {payload.map((item) => (
+                              <div key={item.dataKey} className="flex w-full items-center gap-2">
+                                 <div
+                                    className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+                                    style={{ backgroundColor: item.color }}
+                                  />
+                                <div className="flex flex-1 justify-between leading-none">
+                                  <span className="text-muted-foreground">
+                                    Total
+                                  </span>
+                                  <span className="font-mono font-medium tabular-nums text-foreground">
+                                    AED {item.value.toFixed(2)}
+                                  </span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
                 />
                 <Bar dataKey="total" fill="var(--color-total)" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -173,9 +220,9 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center">
             <div className="grid gap-2">
-              <CardTitle>Documents Expiring Soon</CardTitle>
+              <CardTitle>Documents Expiring Next Month</CardTitle>
               <CardDescription>
-                These documents need your attention for renewal.
+                These documents require renewal next month.
               </CardDescription>
             </div>
             <Button asChild size="sm" className="ml-auto gap-1">
@@ -186,7 +233,7 @@ export default function DashboardPage() {
             </Button>
           </CardHeader>
           <CardContent className="grid gap-8">
-            {expiringSoon.map(doc => (
+            {expiringNextMonth.length > 0 ? expiringNextMonth.map(doc => (
             <div className="flex items-center gap-4" key={doc.id}>
               <Avatar className="hidden h-9 w-9 sm:flex">
                  <AvatarFallback>{doc.name.charAt(0)}</AvatarFallback>
@@ -200,10 +247,12 @@ export default function DashboardPage() {
                 </p>
               </div>
               <div className="ml-auto font-medium">
-                <Badge variant="destructive">Expiring</Badge>
+                <Badge variant="destructive">Renewal Due</Badge>
               </div>
             </div>
-            ))}
+            )) : (
+              <p className="text-sm text-muted-foreground">No documents expiring next month.</p>
+            )}
           </CardContent>
         </Card>
       </div>

@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -142,7 +143,7 @@ export default function ReportsPage() {
                         : "N/A"}
                     </TableCell>
                     <TableCell className="text-right">
-                      ${doc.cost.toFixed(2)}
+                      AED {doc.cost.toFixed(2)}
                     </TableCell>
                   </TableRow>
                 ))
