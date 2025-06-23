@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -69,4 +70,28 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.rdp-day_has_event {
+  position: relative;
+}
+.rdp-day_has_event:not([aria-selected]):not(.rdp-day_today) > .rdp-button:hover {
+    background-color: hsl(var(--accent));
+}
+.rdp-day_has_event::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: hsl(var(--primary));
+}
+.rdp-day_today.rdp-day_has_event::after {
+  background-color: hsl(var(--accent-foreground));
+}
+[aria-selected="true"].rdp-day_has_event::after {
+  background-color: hsl(var(--primary-foreground));
 }

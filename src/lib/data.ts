@@ -144,6 +144,38 @@ export const archivedDocuments: Document[] = [
     },
 ];
 
+export type Appointment = {
+    id: string;
+    title: string;
+    description: string;
+    date: string; // YYYY-MM-DD
+    time: string; // HH:MM
+};
+
+export const appointments: Appointment[] = [
+    {
+        id: 'appt1',
+        title: 'Team Standup',
+        description: 'Weekly team sync meeting.',
+        date: new Date().toISOString().split('T')[0], // Today
+        time: '10:00'
+    },
+    {
+        id: 'appt2',
+        title: 'Vendor Meeting: Safety Gear',
+        description: 'Discuss new safety equipment options.',
+        date: '2024-08-20',
+        time: '14:30'
+    },
+     {
+        id: 'appt3',
+        title: 'Performance Review',
+        description: 'Annual performance review for Jane Smith.',
+        date: '2024-09-01',
+        time: '11:00'
+    }
+];
+
 const companyNames = [...new Set(documents.map(doc => doc.companyName).filter(name => name !== 'N/A'))];
 export const documentCompanies = companyNames.map((name, index) => ({
     id: `comp${index + 1}`,
