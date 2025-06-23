@@ -1,7 +1,10 @@
-import { PlusCircle, File, ListFilter } from "lucide-react";
-import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+"use client"
+
+import * as React from "react"
+import { PlusCircle, File, ListFilter } from "lucide-react"
+import { format } from "date-fns"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,7 +12,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -17,7 +20,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 import {
   Table,
   TableBody,
@@ -25,17 +28,97 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/table"
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs";
-import { documents, documentCategories } from "@/lib/data";
-import { DocumentUploadDialog } from "./document-upload-dialog";
+} from "@/components/ui/tabs"
+import { documents, documentCategories, type Document } from "@/lib/data"
+import { DocumentUploadDialog } from "./document-upload-dialog"
+import { DocumentDetailDialog } from "./document-detail-dialog"
 
 export default function DocumentsPage() {
+  const [selectedDocument, setSelectedDocument] = React.useState<Document | null>(
+    null
+  )
+
+  const renderDocumentList = (docs: Document[]) => (
+    <Card>
+      <CardHeader>
+        <CardTitle>Documents</CardTitle>
+        <CardDescription>
+          Manage all employee documents and track their status.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead className="hidden md:table-cell">Status</TableHead>
+              <TableHead className="hidden md:table-cell">
+                Expiry Date
+              </TableHead>
+              <TableHead>
+                <span className="sr-only">Actions</span>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {docs.map((doc) => (
+              <TableRow key={doc.id}>
+                <TableCell className="font-medium">{doc.name}</TableCell>
+                <TableCell>
+                  <Badge variant="outline">{doc.category}</Badge>
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  <Badge
+                    variant={
+                      doc.status === "Active"
+                        ? "secondary"
+                        : doc.status === "Expiring Soon"
+                        ? "default"
+                        : "destructive"
+                    }
+                    className={
+                      doc.status === "Expiring Soon"
+                        ? "bg-accent text-accent-foreground"
+                        : ""
+                    }
+                  >
+                    {doc.status}
+                  </Badge>
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {doc.expiryDate
+                    ? format(new Date(doc.expiryDate), "PPP")
+                    : "N/A"}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedDocument(doc)}
+                  >
+                    View
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+      <CardFooter>
+        <div className="text-xs text-muted-foreground">
+          Showing <strong>{docs.length}</strong> document(s).
+        </div>
+      </CardFooter>
+    </Card>
+  )
+
   return (
     <>
       <div className="flex items-center">
@@ -65,7 +148,9 @@ export default function DocumentsPage() {
                 <DropdownMenuLabel>Filter by category</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {documentCategories.map((cat) => (
-                    <DropdownMenuCheckboxItem key={cat.id} >{cat.name}</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem key={cat.id}>
+                    {cat.name}
+                  </DropdownMenuCheckboxItem>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -79,70 +164,29 @@ export default function DocumentsPage() {
           </div>
         </div>
         <TabsContent value="all">
-          <Card>
-            <CardHeader>
-              <CardTitle>Documents</CardTitle>
-              <CardDescription>
-                Manage all employee documents and track their status.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Status
-                    </TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      Expiry Date
-                    </TableHead>
-                    <TableHead>
-                      <span className="sr-only">Actions</span>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {documents.map((doc) => (
-                    <TableRow key={doc.id}>
-                      <TableCell className="font-medium">{doc.name}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{doc.category}</Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <Badge
-                          variant={
-                            doc.status === 'Active'
-                              ? 'secondary'
-                              : doc.status === 'Expiring Soon'
-                              ? 'default'
-                              : 'destructive'
-                          }
-                          className={doc.status === 'Expiring Soon' ? 'bg-accent text-accent-foreground':''}
-                        >
-                          {doc.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {doc.expiryDate ? format(new Date(doc.expiryDate), "PPP") : 'N/A'}
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="sm">View</Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-            <CardFooter>
-              <div className="text-xs text-muted-foreground">
-                Showing <strong>1-10</strong> of <strong>32</strong> products
-              </div>
-            </CardFooter>
-          </Card>
+          {renderDocumentList(documents)}
+        </TabsContent>
+        <TabsContent value="active">
+          {renderDocumentList(documents.filter((d) => d.status === "Active"))}
+        </TabsContent>
+        <TabsContent value="expiring">
+          {renderDocumentList(
+            documents.filter((d) => d.status === "Expiring Soon")
+          )}
+        </TabsContent>
+        <TabsContent value="expired">
+          {renderDocumentList(documents.filter((d) => d.status === "Expired"))}
         </TabsContent>
       </Tabs>
+      <DocumentDetailDialog
+        isOpen={!!selectedDocument}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            setSelectedDocument(null)
+          }
+        }}
+        document={selectedDocument}
+      />
     </>
-  );
+  )
 }

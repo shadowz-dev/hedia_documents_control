@@ -1,7 +1,7 @@
-import { Home, FolderKanban, Users, Calendar, Settings, BarChart, BadgeCheck } from "lucide-react";
+import { LayoutDashboard, FolderKanban, Users, Calendar, Settings, BarChart, BadgeCheck, Anchor } from "lucide-react";
 
 export const navLinks = [
-  { href: "/", label: "Dashboard", icon: Home },
+  { href: "/", label: "Dashboard", icon: LayoutDashboard },
   { href: "/documents", label: "Documents", icon: FolderKanban },
   { href: "/categories", label: "Categories", icon: BadgeCheck },
   { href: "/reports", label: "Reports", icon: BarChart },
@@ -18,7 +18,19 @@ export const documentCategories = [
     { id: 'cat5', name: 'Visas', description: 'Work and travel visa documents.' },
 ];
 
-export const documents = [
+export type Document = {
+    id: string;
+    name: string;
+    category: string;
+    uploadDate: string;
+    expiryDate: string | null;
+    status: 'Active' | 'Expiring Soon' | 'Expired';
+    cost: number;
+    version: number;
+    fileUrl: string;
+};
+
+export const documents: Document[] = [
     {
         id: 'doc1',
         name: 'John Doe - Forklift License',
@@ -28,6 +40,7 @@ export const documents = [
         status: 'Expiring Soon',
         cost: 150,
         version: 2,
+        fileUrl: 'https://placehold.co/800x1100.png'
     },
     {
         id: 'doc2',
@@ -38,6 +51,7 @@ export const documents = [
         status: 'Active',
         cost: 110,
         version: 1,
+        fileUrl: 'https://placehold.co/800x1100.png'
     },
     {
         id: 'doc3',
@@ -48,6 +62,7 @@ export const documents = [
         status: 'Expired',
         cost: 75,
         version: 1,
+        fileUrl: 'https://placehold.co/800x1100.png'
     },
     {
         id: 'doc4',
@@ -58,6 +73,7 @@ export const documents = [
         status: 'Active',
         cost: 0,
         version: 3,
+        fileUrl: 'https://placehold.co/800x1100.png'
     },
     {
         id: 'doc5',
@@ -68,6 +84,7 @@ export const documents = [
         status: 'Active',
         cost: 500,
         version: 1,
+        fileUrl: 'https://placehold.co/800x1100.png'
     }
 ];
 
